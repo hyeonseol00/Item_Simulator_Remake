@@ -4,11 +4,12 @@ import expressSession from "express-session";
 import dotEnv from "dotenv";
 import expressMySQLSession from "express-mysql-session";
 import errorHandlingMiddleware from './middlewares/error-handling.middleware';
+import AccountsRouter from "./routes/accounts.router";
 
 dotEnv.config();
 
 const app = express();
-const PORT = 3018;
+const PORT = 3000;
 
 const MySQLStore = expressMySQLSession(expressSession);
 const sessionStore = new MySQLStore({
@@ -34,7 +35,7 @@ app.use(expressSession(
 		},
 	}
 ));
-app.use('/api', []);
+app.use('/api', [AccountsRouter]);
 app.use(errorHandlingMiddleware);
 
 app.listen(PORT, () =>
