@@ -31,7 +31,7 @@ model Accounts {
 // 캐릭터
 model Characters {
 	accountId		Int			@map("account_id")
-	id				String		@id @default(uuid()) @map("id")
+	id				Int			@id @default(autoincrement()) @map("id")
 	name			String		@unique @map("name")
 	health			Int			@map("health")
 	power			Int			@map("power")
@@ -46,7 +46,8 @@ model Characters {
 
 // 인벤토리
 model Inventory {
-	characterId		String		@id @map("character_id")
+	id				Int			@id @default(autoincrement())
+	characterId		Int			@map("character_id")
 	ownItems		Int			@map("own_items")
 
 	character		Characters	@relation(fields: [characterId], references: [id], onDelete: Cascade)
@@ -56,7 +57,8 @@ model Inventory {
 
 // 장비창
 model Equip {
-	characterId		String		@id @map("character_id")
+	id				Int			@id @default(autoincrement())
+	characterId		Int			@map("character_id")
 	equippedItems	Int			@map("equipped_items")
 
 	character		Characters	@relation(fields: [characterId], references: [id], onDelete: Cascade)
@@ -66,10 +68,11 @@ model Equip {
 
 // 아이템
 model Items {
-	id				String		@id @default(uuid()) @map("id")
+	id				Int			@id @default(autoincrement()) @map("id")
 	name			String		@unique @map("name")
-	health			Int			@map("health")
-	power			Int			@map("power")
+	statHealth		Int			@map("stat_health")
+	statPower		Int			@map("stat_power")
+	price			Int			@map("price")
 
 	@@map("items")
 }
