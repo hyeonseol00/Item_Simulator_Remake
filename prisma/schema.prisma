@@ -35,6 +35,7 @@ model Characters {
 	name			String		@unique @map("name")
 	health			Int			@map("health")
 	power			Int			@map("power")
+	money			Int			@map("money")
 
 	account 		Accounts	@relation(fields: [accountId], references: [id], onDelete: Cascade)
 	inventory 		Inventory[]
