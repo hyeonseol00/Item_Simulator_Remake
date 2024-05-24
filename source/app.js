@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import expressSession from "express-session";
 import dotEnv from "dotenv";
 import expressMySQLSession from "express-mysql-session";
+import errorHandlingMiddleware from './middlewares/error-handling.middleware';
 
 dotEnv.config();
 
@@ -34,6 +35,7 @@ app.use(expressSession(
 	}
 ));
 app.use('/api', []);
+app.use(errorHandlingMiddleware);
 
 app.listen(PORT, () =>
 {
