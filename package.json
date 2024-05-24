@@ -16,10 +16,10 @@
 		"express-session": "^1.18.0",
 		"jsonwebtoken": "^9.0.2",
 		"prisma": "^5.14.0",
-		"winston": "^3.13.0"
+		"winston": "^3.13.0",
+		"dotenv": "^16.4.5"
 	},
 	"devDependencies": {
-		"dotenv": "^16.4.5",
 		"nodemon": "^3.1.0"
 	}
 }
