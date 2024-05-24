@@ -48,7 +48,8 @@ model Characters {
 model Inventory {
 	id				Int			@id @default(autoincrement())
 	characterId		Int			@map("character_id")
-	ownItems		Int			@map("own_items")
+	ownItem			Int			@map("own_item")
+	count			Int			@map("count")
 
 	character		Characters	@relation(fields: [characterId], references: [id], onDelete: Cascade)
 
@@ -59,7 +60,8 @@ model Inventory {
 model Equip {
 	id				Int			@id @default(autoincrement())
 	characterId		Int			@map("character_id")
-	equippedItems	Int			@map("equipped_items")
+	equippedItem	Int			@map("equipped_item")
+	count			Int			@map("count")
 
 	character		Characters	@relation(fields: [characterId], references: [id], onDelete: Cascade)
 
