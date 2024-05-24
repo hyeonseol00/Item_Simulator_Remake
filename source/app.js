@@ -6,6 +6,7 @@ import expressMySQLSession from "express-mysql-session";
 import errorHandlingMiddleware from './middlewares/error-handling.middleware.js';
 import AccountsRouter from "./routes/accounts.router.js";
 import CharactersRouter from "./routes/characters.router.js";
+import ItemsRouter from "./routes/items.router.js";
 
 dotEnv.config();
 
@@ -36,7 +37,7 @@ app.use(cookieParser());
 		},
 	}
 )); */
-app.use('/api', [AccountsRouter, CharactersRouter]);
+app.use('/api', [AccountsRouter, CharactersRouter, ItemsRouter]);
 app.use(errorHandlingMiddleware);
 
 app.listen(PORT, () =>
