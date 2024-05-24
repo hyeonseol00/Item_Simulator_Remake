@@ -73,5 +73,26 @@ router.get('/character', authMiddleware, async (req, res, next) =>
 	return res.status(200).json({ message });
 });
 
+/** 게임머니 추가 API **/
+router.patch('/character/add-money/:characterId', async (req, res, next) =>
+{
+	const { characterId } = req.params;
+	const character = await prisma.characters.findFirst({ where: { id: +characterId } });
+
+	if (!character)
+		return res.status(404).json({ errorMessage: '존재하지 않는 캐릭터입니다.' });
+
+	await prisma.characters.update({
+		data: {
+			money: character.money + 10000
+		},
+		where: {
+			id: +characterId
+		}
+	});
+
+	const result = await prisma.characters.findFirst({ where: { id: +characterId } });
+	return res.status(200).json({ remainedMoney: result.money });
+});
 
 export default router;
