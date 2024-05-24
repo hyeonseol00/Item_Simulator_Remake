@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+// 계정
+model Accounts {
+	id				Int			@id @default(autoincrement()) @map("id")
+	userName		String		@map("user_name")
+	loginId			String		@unique @map("login_id")
+	password		String		@map("password")
+	createdAt		DateTime	@default(now()) @map("created_at")
+	updatedAt		DateTime	@updatedAt @map("updated_at")
+
+	characters	Characters[]
+
+	@@map("accounts")
+}
+
+// 캐릭터
+model Characters {
+	accountId		Int			@map("account_id")
+	id				String		@id @default(uuid()) @map("id")
+	name			String		@unique @map("name")
+	health			Int			@map("health")
+	power			Int			@map("power")
+
+	account 		Accounts	@relation(fields: [accountId], references: [id], onDelete: Cascade)
+	inventory 		Inventory[]
+	equip			Equip[]
+
+	@@map("characters")
+}
+
+// 인벤토리
+model Inventory {
+	characterId		String		@id @map("character_id")
+	ownItems		Int			@map("own_items")
+
+	character		Characters	@relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+	@@map("inventory")
+}
+
+// 장비창
+model Equip {
+	characterId		String		@id @map("character_id")
+	equippedItems	Int			@map("equipped_items")
+
+	character		Characters	@relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+	@@map("equip")
+}
+
+// 아이템
+model Items {
+	id				String		@id @default(uuid()) @map("id")
+	name			String		@unique @map("name")
+	health			Int			@map("health")
+	power			Int			@map("power")
+
+	@@map("items")
+}
