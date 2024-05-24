@@ -46,4 +46,32 @@ router.patch("/item", async (req, res, next) =>
 	return res.status(201).json({ message: "아이템 정보 수정을 완료했습니다." });
 });
 
+/** 아이템 목록 조회 API **/
+router.get("/item", async (req, res, next) =>
+{
+	const { itemId } = req.params;
+
+	const items = await prisma.items.findMany({
+		select: {
+			id: true,
+			name: true,
+			price: true
+		}
+	});
+
+	return res.status(201).json({ items });
+});
+
+/** 아이템 상세 조회 API **/
+router.get("/item/:itemId", async (req, res, next) =>
+{
+	const { itemId } = req.params;
+
+	const item = await prisma.items.findFirst({ where: { id: +itemId } });
+	if (!item)
+		return res.status(401).json({ message: '존재하지 않는 아이템입니다.' });
+
+	return res.status(201).json({ item });
+});
+
 export default router;
