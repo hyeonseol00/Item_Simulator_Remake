@@ -5,6 +5,7 @@ import { prisma } from '../utils/prisma/index.js';
 import { Prisma } from '@prisma/client';
 
 const router = express.Router();
+const regex = /^[A-Za-z0-9]*$/;
 
 /** 사용자 회원가입 API **/
 router.post('/sign-up', async (req, res, next) =>
@@ -20,8 +21,13 @@ router.post('/sign-up', async (req, res, next) =>
 
 		if (isExistUser)
 			return res.status(409).json({ message: '이미 존재하는 ID입니다.' });
+		else if (!regex.test(loginId))
+			return res.status(400).json({ message: 'ID는 영어와 숫자만 사용할 수 있습니다.' });
 		else if (password != passwordCheck)
 			return res.status(400).json({ message: '입력한 비밀번호가 서로 다릅니다.' });
+		else if (password.length < 6)
+			return res.status(400).json({ message: '비밀번호는 6자 이상이어야 합니다.' });
+
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 
