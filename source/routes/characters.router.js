@@ -10,11 +10,7 @@ router.post('/character', authMiddleware, async (req, res, next) =>
 	const { id } = req.account;
 	const { name } = req.body;
 
-	const isExistCharacter = await prisma.characters.findFirst({
-		where: {
-			name,
-		},
-	});
+	const isExistCharacter = await prisma.characters.findFirst({ where: { name } });
 
 	if (isExistCharacter)
 		return res.status(409).json({ message: '중복된 이름입니다.' });
@@ -42,7 +38,7 @@ router.delete('/character', authMiddleware, async (req, res, next) =>
 	if (!character)
 		return res.status(404).json({ errorMessage: '존재하지 않는 캐릭터입니다.' });
 	else if (id != character.accountId)
-		return res.status(400).json({ errorMessage: '다른 계정의 캐릭터는 삭제할 수 없습니다!' });
+		return res.status(403).json({ errorMessage: '다른 계정의 캐릭터는 삭제할 수 없습니다!' });
 
 	await prisma.characters.delete({ where: { name } });
 
