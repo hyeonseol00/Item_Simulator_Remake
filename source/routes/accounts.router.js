@@ -12,7 +12,7 @@ router.post('/sign-up', async (req, res, next) =>
 	try
 	{
 		const { loginId, password, passwordCheck, userName } = req.body;
-		const isExistUser = await prisma.users.findFirst({
+		const isExistUser = await prisma.accounts.findFirst({
 			where: {
 				loginId,
 			},
@@ -50,3 +50,28 @@ router.post('/sign-up', async (req, res, next) =>
 		next(error);
 	}
 });
+
+/** 사용자 로그인 API **/
+router.post('/sign-in', async (req, res, next) =>
+{
+	const { loginId, password } = req.body;
+	const account = await prisma.accounts.findFirst({ where: { loginId } });
+
+	if (!account)
+		return res.status(401).json({ message: '존재하지 않는 ID입니다.' });
+	else if (!(await bcrypt.compare(password, account.password)))
+		return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
+
+	const token = jwt.sign(
+		{
+			loginId: account.loginId,
+		},
+		process.env.TOKEN_SECRET_KEY,
+	);
+
+	res.cookie('authorization', `Bearer ${token}`);
+
+	return res.status(200).json({ message: '로그인 성공' });
+});
+
+export default router;
